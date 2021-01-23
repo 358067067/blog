@@ -6,5 +6,5 @@ import (
 
 type Category struct {
 	gorm.Model
-	Name string `gorm:"type:varchar(20);not null" JSON:"name"`
+	Name string `gorm:"type:varchar(20);not null" json:"name"`
 }

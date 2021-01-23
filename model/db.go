@@ -15,6 +15,7 @@ var (
 	err error
 )
 
+//InitDb 数据库连接
 func InitDb() {
 	db, err = gorm.Open(utils.Db, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		utils.DbUser,
