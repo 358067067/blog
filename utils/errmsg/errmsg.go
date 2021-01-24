@@ -12,9 +12,9 @@ const (
 	ERROR_TOKEN_WRONG    = 1006
 	ERROR_TOKEN_TYPE     = 1007
 	// code = 2000 文章
-
+	ERROR_ARTICLE_NIL = 1011
 	// code = 3000 分类
-	ERROR_CNAME_USED = 1008
+	ERROR_CNAME_USED = 1021
 )
 
 var codeMsg = map[int]string{
@@ -27,7 +27,8 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_RUNTIME:  "token过期！",
 	ERROR_TOKEN_WRONG:    "token不正确！",
 	ERROR_TOKEN_TYPE:     "token格式错误！",
-	ERROR_CNAME_USED:     "分类名称已存在!",
+	ERROR_ARTICLE_NIL:    "文章部分数值不能为空！",
+	ERROR_CNAME_USED:     "分类名称已存在！",
 }
 
 func GetErrMsg(code int) string {

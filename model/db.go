@@ -29,6 +29,7 @@ func InitDb() {
 	}
 	// 禁用表明复数形式，如结构体'User'，表明是'user'，不禁用是'users'
 	db.SingularTable(true)
+	// 以下结构体会自动创建表
 	db.AutoMigrate(&User{}, &Category{}, &Article{})
 	// 空闲连接数
 	db.DB().SetMaxIdleConns(10)

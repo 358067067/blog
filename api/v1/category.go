@@ -14,8 +14,8 @@ func AddCategory(ctx *gin.Context) {
 	var c model.Category
 	_ = ctx.ShouldBindJSON(&c)
 	if c.Name != "" {
-		if code = model.CheckCategory(c.Name); code == errmsg.SUCCESS {
-			code = model.CreatCategory(&c)
+		if code = c.CheckCategory(c.Name); code == errmsg.SUCCESS {
+			code = c.CreatCategory()
 		} else {
 			code = errmsg.ERROR_CNAME_USED
 			ctx.Abort()
@@ -30,16 +30,17 @@ func AddCategory(ctx *gin.Context) {
 	})
 }
 
-//UpdCategory 修改分类
-func UpdCategory(ctx *gin.Context) {
+//EditCategory 修改分类
+func EditCategory(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	var c model.Category
 	_ = ctx.ShouldBindJSON(&c)
 	if c.Name != "" {
-		if code = model.CheckCategory(c.Name); code > 0 && code != id && code != errmsg.SUCCESS {
-			code = model.UpdateCategory(id, &c)
-		} else {
+		if code = c.CheckCategory(c.Name); code > 0 && code != id && code != errmsg.SUCCESS {
 			code = errmsg.ERROR_CNAME_USED
+			ctx.Abort()
+		} else {
+			code = c.UpdateCategory(id)
 		}
 	} else {
 		code = errmsg.ERROR
@@ -53,8 +54,9 @@ func UpdCategory(ctx *gin.Context) {
 
 //GetCategories 获取所有分类
 func GetCategories(ctx *gin.Context) {
+	var c model.Category
 	var cs []model.Category
-	cs = model.GetCategories()
+	cs = c.GetCategories()
 	code = errmsg.SUCCESS
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -65,8 +67,9 @@ func GetCategories(ctx *gin.Context) {
 
 //DelCategory 删除分类
 func DelCategory(ctx *gin.Context) {
+	var c model.Category
 	id, _ := strconv.Atoi(ctx.Param("id"))
-	model.DeleteCategory(id)
+	c.DeleteCategory(id)
 	code = errmsg.SUCCESS
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  code,

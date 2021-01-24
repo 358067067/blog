@@ -13,7 +13,7 @@ type Category struct {
 }
 
 //CreatCategory 新增
-func CreatCategory(c *Category) int {
+func (c *Category) CreatCategory() int {
 	if err := db.Create(c).Error; err != nil {
 		return errmsg.ERROR
 	}
@@ -21,7 +21,7 @@ func CreatCategory(c *Category) int {
 }
 
 //UpdateCategory 更新
-func UpdateCategory(id int, c *Category) int {
+func (c *Category) UpdateCategory(id int) int {
 	var maps = make(map[string]string)
 	maps["name"] = c.Name
 	if err := db.Model(&Category{}).Where("id = ? ", id).Updates(maps).Error; err != nil {
@@ -31,7 +31,7 @@ func UpdateCategory(id int, c *Category) int {
 }
 
 // DeleteCategory 删除
-func DeleteCategory(id int) int {
+func (c *Category) DeleteCategory(id int) int {
 	if err := db.Where("id = ?", id).Delete(&Category{}).Error; err != nil {
 		return errmsg.ERROR
 	}
@@ -39,8 +39,7 @@ func DeleteCategory(id int) int {
 }
 
 //CheckCategory 重名
-func CheckCategory(name string) int {
-	var c Category
+func (c *Category) CheckCategory(name string) int {
 	db.Select("id").Where("name = ? ", name).First(&c)
 	if c.ID > 0 {
 		return int(c.ID)
@@ -49,7 +48,7 @@ func CheckCategory(name string) int {
 }
 
 //GetCategories 查询所有分类
-func GetCategories() []Category {
+func (c *Category) GetCategories() []Category {
 	var cs []Category
 	if err := db.Find(&cs).Error; err != nil && err != gorm.ErrRecordNotFound {
 		return nil

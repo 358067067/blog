@@ -11,17 +11,29 @@ import (
 func InitRouter() {
 	gin.SetMode(utils.AppMode)
 	r := gin.Default()
-	rv1 := r.Group("api/v1")
+	r1 := r.Group("api/v1/user")
 	{
 		// User模块路由接口
-		rv1.POST("user/add", v1.AddUser)
-		rv1.GET("users", v1.GetUsers)
-		rv1.PUT("user/:id", v1.EditUser)
-		rv1.DELETE("user/:id", v1.DelUser)
-		rv1.POST("category/add", v1.AddCategory)
-		rv1.GET("categories", v1.GetCategories)
-		rv1.PUT("category/:id", v1.EditUser)
-		rv1.DELETE("category/:id", v1.DelCategory)
+		r1.POST("/add", v1.AddUser)
+		r1.GET("/list", v1.GetUsers)
+		r1.PUT("/:id", v1.EditUser)
+		r1.DELETE("/:id", v1.DelUser)
+	}
+	r2 := r.Group("api/v1/category")
+	{
+		r2.POST("/add", v1.AddCategory)
+		r2.GET("/list", v1.GetCategories)
+		r2.PUT("/:id", v1.EditCategory)
+		r2.DELETE("/:id", v1.DelCategory)
+	}
+	r3 := r.Group("api/v1/article")
+	{
+		r3.POST("/add", v1.AddArticle)
+		r3.GET("/list", v1.GetAllArt)
+		r3.GET("/single/:id", v1.GetArticle)
+		r3.GET("/c/", v1.GetArticlesByCid)
+		r3.PUT("/:id", v1.EditArticle)
+		r3.DELETE("/:id", v1.DelArticle)
 	}
 	r.Run(utils.HttpPort)
 }

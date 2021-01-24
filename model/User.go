@@ -44,7 +44,7 @@ func (u *User) BeforeSave(tx *gorm.DB) error {
 }
 
 //CreateUser 添加用户
-func CreateUser(u *User) int {
+func (u *User) CreateUser() int {
 	// u.Password = scryptPwd(u.Password)
 	if err := db.Create(u).Error; err != nil {
 		return errmsg.ERROR
@@ -53,8 +53,7 @@ func CreateUser(u *User) int {
 }
 
 //CheckUser 查询用户是否存在
-func CheckUser(name string) int {
-	var u User
+func (u *User) CheckUser(name string) int {
 	db.Select("id").Where("username = ?", name).First(&u)
 	if u.ID > 0 {
 		return int(u.ID)
@@ -63,7 +62,7 @@ func CheckUser(name string) int {
 }
 
 //GetUsers 查询用户
-func GetUsers(pagaSize int, pageNum int) []User {
+func (u *User) GetUsers(pagaSize int, pageNum int) []User {
 	var us []User
 	if err := db.Limit(pagaSize).Offset((pageNum - 1) * pagaSize).Find(&us).Error; err != nil && err != gorm.ErrRecordNotFound {
 		return nil
@@ -72,7 +71,7 @@ func GetUsers(pagaSize int, pageNum int) []User {
 }
 
 //DeleteUser 删除用户
-func DeleteUser(id int) int {
+func (u *User) DeleteUser(id int) int {
 	if err := db.Where("id = ? ", id).Delete(&User{}).Error; err != nil {
 		return errmsg.ERROR
 	}
@@ -80,7 +79,7 @@ func DeleteUser(id int) int {
 }
 
 //UpdateUser 更新用户
-func UpdateUser(id int, u *User) int {
+func (u *User) UpdateUser(id int) int {
 	var maps = make(map[string]interface{})
 	maps["username"] = u.Username
 	maps["role"] = u.Role
