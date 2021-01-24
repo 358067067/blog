@@ -71,16 +71,16 @@ func GetUsers(pagaSize int, pageNum int) []User {
 	return us
 }
 
-//DelUser 删除用户
-func DelUser(id int) int {
+//DeleteUser 删除用户
+func DeleteUser(id int) int {
 	if err := db.Where("id = ? ", id).Delete(&User{}).Error; err != nil {
 		return errmsg.ERROR
 	}
 	return errmsg.SUCCESS
 }
 
-//UpdUser 更新用户
-func UpdUser(id int, u *User) int {
+//UpdateUser 更新用户
+func UpdateUser(id int, u *User) int {
 	var maps = make(map[string]interface{})
 	maps["username"] = u.Username
 	maps["role"] = u.Role

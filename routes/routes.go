@@ -18,6 +18,10 @@ func InitRouter() {
 		rv1.GET("users", v1.GetUsers)
 		rv1.PUT("user/:id", v1.EditUser)
 		rv1.DELETE("user/:id", v1.DelUser)
+		rv1.POST("category/add", v1.AddCategory)
+		rv1.GET("categories", v1.GetCategories)
+		rv1.PUT("category/:id", v1.EditUser)
+		rv1.DELETE("category/:id", v1.DelCategory)
 	}
 	r.Run(utils.HttpPort)
 }

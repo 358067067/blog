@@ -65,7 +65,7 @@ func EditUser(c *gin.Context) {
 			// 如果没有next，会先执行中间件，再执行业务方法
 			c.Abort()
 		} else {
-			code = model.UpdUser(id, &u)
+			code = model.UpdateUser(id, &u)
 		}
 	} else {
 		code = errmsg.ERROR
@@ -81,7 +81,7 @@ func EditUser(c *gin.Context) {
 //DelUser 删除用户
 func DelUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	code := model.DelUser(id)
+	code := model.DeleteUser(id)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),
