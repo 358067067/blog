@@ -30,7 +30,7 @@ func (a *Article) CreateArticle() int {
 func (a *Article) UpdateArticle(id int) int {
 	var maps = make(map[string]interface{})
 	maps["title"] = a.Title
-	maps["cid"] = a.CategoryID
+	maps["category_id"] = a.CategoryID
 	maps["desc"] = a.Desc
 	maps["content"] = a.Content
 	maps["img"] = a.Img

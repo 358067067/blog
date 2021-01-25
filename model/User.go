@@ -88,3 +88,18 @@ func (u *User) UpdateUser(id int) int {
 	}
 	return errmsg.SUCCESS
 }
+
+//CheckLogin 登录验证
+func (u *User) CheckLogin(username string, password string) int {
+	db.Where("username = ?", username).First(&u)
+	if u.ID == 0 {
+		return errmsg.ERROR_USER_NOT_EXIST
+	}
+	if scryptPwd(password) != u.Password {
+		return errmsg.ERROR_PASSWORD_WRONG
+	}
+	if u.Role != 0 {
+		return errmsg.ERROR_USER_ROLE
+	}
+	return errmsg.SUCCESS
+}
