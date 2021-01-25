@@ -28,12 +28,16 @@ func InitRouter() {
 		auth.GET("user/list", v1.GetUsers)
 		auth.PUT("user/:id", v1.EditUser)
 		auth.DELETE("user/:id", v1.DelUser)
+
 		auth.POST("category/add", v1.AddCategory)
 		auth.PUT("category/:id", v1.EditCategory)
 		auth.DELETE("category/:id", v1.DelCategory)
+
 		auth.POST("article/add", v1.AddArticle)
 		auth.PUT("article/:id", v1.EditArticle)
 		auth.DELETE("article/:id", v1.DelArticle)
+		//上传
+		auth.POST("upload", v1.Upload)
 	}
 	r.Run(utils.HttpPort)
 }

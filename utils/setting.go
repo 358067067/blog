@@ -17,6 +17,11 @@ var (
 	DbUser string
 	DbPwd  string
 	DbName string
+
+	AK         string
+	SK         string
+	Bucket     string
+	FileServer string
 )
 
 func init() {
@@ -26,12 +31,14 @@ func init() {
 	}
 	loadServer(file)
 	loadData(file)
+	LoadSevenCow(file)
 }
 
 func loadServer(file *ini.File) {
 	AppMode = file.Section("server").Key("AppMode").MustString("debug")
 	HttpPort = file.Section("server").Key("HttpPort").MustString(":8080")
 	JwtKey = file.Section("server").Key("JwtKey").MustString("734jks824")
+
 }
 
 func loadData(file *ini.File) {
@@ -41,4 +48,11 @@ func loadData(file *ini.File) {
 	DbUser = file.Section("database").Key("DbUser").MustString("root")
 	DbPwd = file.Section("database").Key("DbPwd").MustString("root")
 	DbName = file.Section("database").Key("DbName").MustString("test")
+}
+
+func LoadSevenCow(file *ini.File) {
+	AK = file.Section("sevencow").Key("AK").String()
+	SK = file.Section("sevencow").Key("SK").String()
+	Bucket = file.Section("sevencow").Key("Bucket").String()
+	FileServer = file.Section("sevencow").Key("FileServer").String()
 }
