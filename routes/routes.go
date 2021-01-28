@@ -11,16 +11,8 @@ import (
 //InitRouter 初始化路由
 func InitRouter() {
 	gin.SetMode(utils.AppMode)
-	r := gin.Default()
-	r1 := r.Group("api/v1/")
-	{
-		r1.POST("user/add", v1.AddUser)
-		r1.GET("category/list", v1.GetCategories)
-		r1.GET("article/list", v1.GetAllArt)
-		r1.GET("article/single/:id", v1.GetArticle)
-		r1.GET("article/c/", v1.GetArticlesByCid)
-		r1.POST("login", v1.Login)
-	}
+	r := gin.New()
+	r.Use(gin.Recovery())
 
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtTokenMid())
@@ -38,6 +30,16 @@ func InitRouter() {
 		auth.DELETE("article/:id", v1.DelArticle)
 		//上传
 		auth.POST("upload", v1.Upload)
+	}
+
+	r1 := r.Group("api/v1/")
+	{
+		r1.POST("user/add", v1.AddUser)
+		r1.GET("category/list", v1.GetCategories)
+		r1.GET("article/list", v1.GetAllArt)
+		r1.GET("article/single/:id", v1.GetArticle)
+		r1.GET("article/c/", v1.GetArticlesByCid)
+		r1.POST("login", v1.Login)
 	}
 	r.Run(utils.HttpPort)
 }
