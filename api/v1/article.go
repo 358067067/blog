@@ -56,10 +56,11 @@ func GetAllArt(ctx *gin.Context) {
 	pageSize, _ := strconv.Atoi(ctx.Query("pageSize"))
 	pageNum, _ := strconv.Atoi(ctx.Query("pageNum"))
 	var a model.Article
-	as, code := a.GetAllArticles(pageSize, pageNum)
+	as, code, total := a.GetAllArticles(pageSize, pageNum)
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    as,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code),
 	})
 }
@@ -77,17 +78,18 @@ func GetArticle(ctx *gin.Context) {
 	})
 }
 
-//GetArticlesByCid 按分类cid查询
+//GetArticlesByCid 按分类cid查询文章
 func GetArticlesByCid(ctx *gin.Context) {
 	cid, _ := strconv.Atoi(ctx.Query("cid"))
 	pageSize, _ := strconv.Atoi(ctx.Query("pageSize"))
 	pageNum, _ := strconv.Atoi(ctx.Query("pageNum"))
 	var a model.Article
-	as := a.GetArticlesByCid(cid, pageSize, pageNum)
+	as, total := a.GetArticlesByCid(cid, pageSize, pageNum)
 	code = errmsg.SUCCESS
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    as,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code),
 	})
 }

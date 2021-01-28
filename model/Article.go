@@ -56,19 +56,21 @@ func (a *Article) GetArticle(id int) {
 }
 
 // GetAllArticles 分页查询
-func (a *Article) GetAllArticles(pageSize int, pageNum int) ([]Article, int) {
+func (a *Article) GetAllArticles(pageSize int, pageNum int) ([]Article, int, int) {
 	var as []Article
-	if err := db.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&as).Error; err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errmsg.ERROR
+	var total int
+	if err := db.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&as).Count(&total).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, errmsg.ERROR, 0
 	}
-	return as, errmsg.SUCCESS
+	return as, errmsg.SUCCESS, total
 }
 
 //GetArticlesByCid 分类下所有文章
-func (a *Article) GetArticlesByCid(cid int, pageSize int, pageNum int) []Article {
+func (a *Article) GetArticlesByCid(cid int, pageSize int, pageNum int) ([]Article, int) {
 	var as []Article
-	if err := db.Preload("Category").Where("category_id = ?", cid).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&as).Error; err != nil && err != gorm.ErrRecordNotFound {
-		return nil
+	var total int
+	if err := db.Preload("Category").Where("category_id = ?", cid).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&as).Count(&total).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, 0
 	}
-	return as
+	return as, total
 }

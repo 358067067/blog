@@ -13,6 +13,7 @@ func InitRouter() {
 	gin.SetMode(utils.AppMode)
 	r := gin.New()
 	//引入中间件
+	r.Use(middleware.Cors())
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
 

@@ -12,9 +12,9 @@ import (
 //User 结构体
 type User struct {
 	gorm.Model
-	Username string `gorm:"type:varchar(20);not null " json:"username"`
-	Password string `gorm:"type:varchar(20);not null " json:"password"`
-	Role     int    `gorm:"type:int" json:"role"`
+	Username string `gorm:"type:varchar(20);not null " json:"username" validate:"required,min=4,max=12" label:"用户名"`
+	Password string `gorm:"type:varchar(20);not null " json:"password" validate:"required,min=6,max=20" label:"密码"`
+	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" validate:"required,gte=2" label:"权限等级"`
 }
 
 //scryptPwd 密码加密
@@ -62,12 +62,13 @@ func (u *User) CheckUser(name string) int {
 }
 
 //GetUsers 查询用户
-func (u *User) GetUsers(pagaSize int, pageNum int) []User {
+func (u *User) GetUsers(pagaSize int, pageNum int) ([]User, int) {
 	var us []User
-	if err := db.Limit(pagaSize).Offset((pageNum - 1) * pagaSize).Find(&us).Error; err != nil && err != gorm.ErrRecordNotFound {
-		return nil
+	var total int
+	if err := db.Limit(pagaSize).Offset((pageNum - 1) * pagaSize).Find(&us).Count(&total).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, 0
 	}
-	return us
+	return us, total
 }
 
 //DeleteUser 删除用户
@@ -98,7 +99,7 @@ func (u *User) CheckLogin(username string, password string) int {
 	if scryptPwd(password) != u.Password {
 		return errmsg.ERROR_PASSWORD_WRONG
 	}
-	if u.Role != 0 {
+	if u.Role != 1 {
 		return errmsg.ERROR_USER_ROLE
 	}
 	return errmsg.SUCCESS

@@ -3,6 +3,7 @@ package v1
 import (
 	"blog/model"
 	"blog/utils/errmsg"
+	"blog/utils/validator"
 	"net/http"
 	"strconv"
 
@@ -16,6 +17,14 @@ func AddUser(c *gin.Context) {
 	var u model.User
 	//将请求中的json绑定到u中
 	_ = c.ShouldBindJSON(&u)
+	msg, code := validator.Validator(u)
+	if code != errmsg.SUCCESS {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  code,
+			"message": msg,
+		})
+		return
+	}
 	if u.Username != "" && u.Password != "" {
 		code = u.CheckUser(u.Username)
 		if code == errmsg.SUCCESS {
@@ -44,11 +53,12 @@ func GetUsers(c *gin.Context) {
 	if pageSize == 0 && pageNum == 0 {
 		pageSize = -1
 	}
-	us := u.GetUsers(pageSize, pageNum)
+	us, total := u.GetUsers(pageSize, pageNum)
 	code = errmsg.SUCCESS
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    us,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code),
 	})
 }

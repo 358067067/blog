@@ -16,13 +16,13 @@ import (
 func Logger() gin.HandlerFunc {
 	filePath := "log/goblog"
 	//linkName := "latest_log.log"
-	src, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
-	if err != nil {
-		fmt.Println("err", err)
-	}
+	//src, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
+	//if err != nil {
+	//	fmt.Println("err", err)
+	//}
 
 	logger := logrus.New()
-	logger.Out = src
+	//logger.Out = src
 	logger.SetLevel(logrus.DebugLevel)
 
 	logWriter, _ := rotatelogs.New(
